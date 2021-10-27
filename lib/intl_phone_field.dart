@@ -189,62 +189,64 @@ class _IntlPhoneFieldState extends State<IntlPhoneField> {
 
   Future<void> _changeCountry() async {
     filteredCountries = countries;
-    await showDialog(
+    await showBottomSheet(
       context: context,
-      useRootNavigator: false,
-      child: StatefulBuilder(
-        builder: (ctx, setState) => Dialog(
-          child: Container(
-            padding: EdgeInsets.all(10),
-            child: Column(
-              children: <Widget>[
-                TextField(
-                  decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    labelText: widget.searchText,
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      filteredCountries = countries
-                          .where((country) => country['name']
-                              .toLowerCase()
-                              .contains(value.toLowerCase()))
-                          .toList();
-                    });
-                  },
+      builder: (context) => StatefulBuilder(
+        builder: (ctx, setState) => Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              TextField(
+                decoration: InputDecoration(
+                  suffixIcon: Icon(Icons.search),
+                  labelText: widget.searchText,
                 ),
-                SizedBox(height: 20),
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: filteredCountries.length,
-                    itemBuilder: (ctx, index) => Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Text(
-                            filteredCountries[index]['flag'],
-                            style: TextStyle(fontSize: 30),
-                          ),
-                          title: Text(
-                            filteredCountries[index]['name'],
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          trailing: Text(
-                            filteredCountries[index]['dial_code'],
-                            style: TextStyle(fontWeight: FontWeight.w700),
-                          ),
-                          onTap: () {
-                            _selectedCountry = filteredCountries[index];
-                            Navigator.of(context).pop();
-                          },
+                onChanged: (value) {
+                  setState(() {
+                    filteredCountries = countries
+                        .where((country) => country['name']
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
+                        .toList();
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: filteredCountries.length,
+                  itemBuilder: (ctx, index) => Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: Image.asset(
+                          "flags/${filteredCountries[index]['code'].toLowerCase()}.png",
+                          width: 30,
+                          height: 30,
                         ),
-                        Divider(thickness: 1),
-                      ],
-                    ),
+                        //  Text(
+                        //   filteredCountries[index]['flag'],
+                        //   style: TextStyle(fontSize: 30),
+                        // ),
+                        title: Text(
+                          filteredCountries[index]['name'],
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        trailing: Text(
+                          filteredCountries[index]['dial_code'],
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        onTap: () {
+                          _selectedCountry = filteredCountries[index];
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      Divider(thickness: 1),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
